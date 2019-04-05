@@ -1,0 +1,43 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+// Variables
+@import 'variables';
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+.navbar-laravel {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
+{
+  opacity: 0;
+}
+
+@import '~@fortawesome/fontawesome-free/scss/brands';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+
+.CodeMirror {
+  font-family: Arial, monospace;
+  font-size: 14px;
+}
+.card-header a:link,.card-header a:visited {
+  color:#000;
+}
+.card-header a:hover,.card-header a:active {
+  color: #000;
+}
+
+.card-footer a:link,.card-footer a:visited {
+  color:#000;
+}
+.card-footer a:hover,.card-footer a:active {
+  color: #000;
+}
