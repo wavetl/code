@@ -19,19 +19,23 @@ Auth::routes();
 
 
 // CODE routes
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/', 'CodeController@index')->name('home');
 Route::get('/code/share', 'CodeController@share')->name('code_share')->middleware('auth');
 Route::get('/code/{slug}/{id}', 'CodeController@view')->name('code_view');
 
 
 // USER routes
 Route::get('/user/info/{id}','UserController@info')->name('user_info');
-Route::get('/user/pm/{id}','UserController@pm')->name('user_pm')->middleware('auth');
+
+// PM routes
+Route::get('/pm','PMController@inbox')->name('pm_inbox')->middleware('auth');
+Route::get('/pm/send/{id}','PMController@form')->name('pm_form')->middleware('auth');
+Route::get('/pm/{id}','PMController@show')->name('pm_show')->middleware('auth');
 
 // API Routes
 Route::post('/api/code/list', function () {
     return new CodeResource(Code::with(['user'])->get());
 })->name('api_code_list');
 Route::post('/api/code/save', 'CodeController@save')->name('api_code_save')->middleware('auth');
-Route::post('/api/code/find', 'CodeController@find')->name('code_find');
-Route::post('/api/pm/send','UserController@pm_send')->name('pm_send')->middleware('auth');
+Route::post('/api/code/find', 'CodeController@find')->name('api_code_find');
+Route::post('/api/pm/send','PMController@send')->name('api_pm_send')->middleware('auth');

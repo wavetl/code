@@ -14,7 +14,7 @@
             <button type="button" @click="submitCode" class="btn btn-success"><i class="fa fa-check"></i> 提交代码</button>
             <a class="btn btn-outline-secondary" href="/">取消</a>
 
-            <a id="navbarDropdown" class="dropdown-toggle btn btn-outline-secondary" href="#" role="button"
+            <a id="navbarDropdown" class="dropdown-toggle btn btn-xs btn-outline-secondary" href="#" role="button"
                data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false" style="position: absolute;right:0px;">
                 {{ code_language.name.toUpperCase() }} <span class="caret"></span></a>

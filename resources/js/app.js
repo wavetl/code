@@ -29,6 +29,7 @@ const app = new Vue({
         return {}
     },
     mounted() {
+        jQuery('[data-toggle="tooltip"]').tooltip();
     },
     methods: {
         sendPM() {

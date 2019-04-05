@@ -5,12 +5,19 @@ namespace App\Http\Controllers;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
+use App\Http\Controllers\BaseController;
 use App\Http\Requests\CodeRequest;
 
 use Overtrue\Pinyin\Pinyin;
 
-class CodeController extends Controller
+class CodeController extends BaseController
 {
+    public function index()
+    {
+        return view('home');
+    }
+
     public function share()
     {
         return view('code/share');

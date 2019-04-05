@@ -54570,7 +54570,7 @@ var render = function() {
         _c(
           "a",
           {
-            staticClass: "dropdown-toggle btn btn-outline-secondary",
+            staticClass: "dropdown-toggle btn btn-xs btn-outline-secondary",
             staticStyle: { position: "absolute", right: "0px" },
             attrs: {
               id: "navbarDropdown",
@@ -66991,7 +66991,9 @@ var app = new Vue({
   data: function data() {
     return {};
   },
-  mounted: function mounted() {},
+  mounted: function mounted() {
+    jQuery('[data-toggle="tooltip"]').tooltip();
+  },
   methods: {
     sendPM: function sendPM() {
       var _this = this;
