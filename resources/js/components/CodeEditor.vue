@@ -14,14 +14,14 @@
             <button type="button" @click="submitCode" class="btn btn-success"><i class="fa fa-check"></i> 提交代码</button>
             <a class="btn btn-outline-secondary" href="/">取消</a>
 
-            <a id="navbarDropdown" class="dropdown-toggle btn btn-xs btn-outline-secondary" href="#" role="button"
+            <a id="navbarDropdown" class="dropdown-toggle btn btn-xs btn-outline-info" href="#" role="button"
                data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false" style="position: absolute;right:0px;">
-                {{ code_language.name.toUpperCase() }} <span class="caret"></span></a>
+                <i :class="'fab fa-' + code_language.id"></i> {{ code_language.name }} <span class="caret"></span></a>
             <div aria-labelledby="navbarDropdown" class="dropdown-menu dropdown-menu-right">
                 <a class="dropdown-item" v-for="lang in code_language_list"
-                   @click="changeCodeLanguage(lang.name)">{{
-                    lang.name.toUpperCase() }}</a>
+                   @click="changeCodeLanguage(lang.id)"><i :class="'fab fa-' + lang.id"></i> {{
+                    lang.name }}</a>
             </div>
         </div>
     </div>
@@ -35,8 +35,10 @@
     import 'codemirror/lib/codemirror.css'
     import 'codemirror/theme/solarized.css'
     import 'codemirror/theme/cobalt.css'
+    import 'codemirror/theme/material.css'
     import 'codemirror/mode/javascript/javascript.js'
     import 'codemirror/mode/php/php.js'
+    import 'codemirror/mode/python/python.js'
 
     const Swal = require('sweetalert2')
 
@@ -51,8 +53,9 @@
                 subject: '',
                 code_language: {},
                 code_language_list: [
-                    {'name': 'php', 'mime': 'application/x-httpd-php', 'theme': 'cobalt'},
-                    {'name': 'js', 'mime': 'text/javascript', 'theme': 'solarized light'},
+                    {'id': 'php', 'name':'PHP', 'mime': 'application/x-httpd-php', 'theme': 'cobalt'},
+                    {'id': 'js', 'name' : 'JavaScript','mime': 'text/javascript', 'theme': 'solarized light'},
+                    {'id': 'python','name' : 'Python', 'mime': 'text/x-python', 'theme': 'material'}
                 ],
                 cmModel: null,
                 cmOptions: {
@@ -68,7 +71,7 @@
         methods: {
             changeCodeLanguage(lang) {
                 this.code_language_list.filter((v, i) => {
-                    if (lang === v.name) {
+                    if (lang === v.id) {
                         this.code_language = v;
                         return;
                     }
@@ -78,13 +81,13 @@
                 let data = {
                     'subject': this.subject,
                     'code': this.cmModel,
-                    'language': this.code_language,
+                    'language': this.code_language.id,
                 }
                 this.$axios.post('code/save', data).then((res) => {
 
                     Swal.fire(
-                        '发布成功',
-                        '您的代码已成功发布到共享平台',
+                        '分享成功',
+                        '你的代码已经成功分享',
                         'success'
                     ).then(() => {
                         window.location.href = '/';

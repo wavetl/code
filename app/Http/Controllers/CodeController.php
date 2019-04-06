@@ -8,14 +8,16 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\CodeRequest;
+use App\Code;
 
 use Overtrue\Pinyin\Pinyin;
 
 class CodeController extends BaseController
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('home');
+        $language = $request->route('language');
+        return view('home', compact('language'));
     }
 
     public function share()
@@ -27,13 +29,17 @@ class CodeController extends BaseController
     {
         $validated = $request->validated();
 
-        $code = app('App\Code');
+        $code = new Code();
         $code->subject = $validated['subject'];
         $code->code = $validated['code'];
         $code->user_id = Auth::id();
         $code->language = $validated['language'];
         $code->slug = app(Pinyin::class)->permalink($validated['subject']);
         $code->save();
+
+        $user = Auth::user();
+        $user->code_count += 1;
+        $user->save();
         return ['code_id' => $code->id];
     }
 

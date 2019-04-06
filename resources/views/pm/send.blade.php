@@ -2,7 +2,7 @@
 @section('main')
     <div class="card">
         <div class="card-header">
-            <span><i class="fa fa-comment"></i> {{ __('pm.PM') }}</span>
+            <span><i class="fa fa-paper-plane"></i> {{ __('pm.PM') }}</span>
         </div>
         <div class="card-body">
             <div class="form-group">

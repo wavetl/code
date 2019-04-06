@@ -13,15 +13,18 @@
             <div>
                 <div class="card mb-3" v-for="code in code_list">
                     <div class="card-header">
-                        <a :href="'/code/' + code.slug + '/' + code.id">{{ code.subject }}</a>
+                        <a :href="'/code/' + code.slug + '/' + code.id"><i class="fa fa-code"></i> {{ code.subject
+                            }}</a>
+                        <span class="float-right"><i class="fa fa-user"></i>  <a :href="'/user/info/' + code.user.id">{{ code.user.name }}</a></span>
                     </div>
                     <div class="card-body">
                         <codemirror :value="code.code" :options="getOptions(code.language)"></codemirror>
                     </div>
                     <div class="card-footer">
-                        <i class="fa fa-user"></i> <span class="ml-1"> <a :href="'/user/info/' + code.user.id">{{ code.user.name }}</a></span>
-                        <span class="text-secondary ml-3"><i class="fa fa-clock"></i> {{ code.created_at }}</span>
-                        <span class="float-right" :class="cssClassMapping[code.language]"><i class="fa fa-code"></i> {{ code.language.toUpperCase() }}</span>
+                        <span class="mr-2" :class="cssClassMapping[code.language]"><i
+                                :class="'fab fa-' + code.language"></i> {{ code_language_mapping[code.language].name }}</span>
+                        <span class="text-secondary float-right"><i
+                                class="fa fa-clock"></i> {{ code.created_at }}</span>
                     </div>
                 </div>
             </div>
@@ -35,7 +38,9 @@
 
     // require styles
     import 'codemirror/lib/codemirror.css'
+    import 'codemirror/theme/solarized.css'
     import 'codemirror/theme/cobalt.css'
+    import 'codemirror/theme/material.css'
     import 'codemirror/mode/javascript/javascript.js'
     import 'codemirror/mode/php/php.js'
     import 'codemirror/mode/python/python.js'
@@ -48,17 +53,19 @@
             codemirror,
             'grid-loader': GridLoader
         },
-        props: ['code_id'],
+        props: ['code_id', 'language'],
         data() {
             return {
                 code_list: [],
                 code_language_mapping: {
-                    'php': {'name': 'php', 'mime': 'application/x-httpd-php', 'theme': 'cobalt'},
-                    'js': {'name': 'js', 'mime': 'text/javascript', 'theme': 'solarized light'},
+                    'php': {'id': 'php', 'name': 'PHP', 'mime': 'application/x-httpd-php', 'theme': 'cobalt'},
+                    'js': {'id': 'js', 'name': 'JavaScript', 'mime': 'text/javascript', 'theme': 'solarized light'},
+                    'python': {'id': 'python', 'name': 'Python', 'mime': 'text/x-python', 'theme': 'material'}
                 },
                 cssClassMapping: {
-                    'php': {'text-primary' : true},
-                    'js': {'text-success' : true}
+                    'php': {'text-primary': true},
+                    'js': {'text-success': true},
+                    'python': {'text-danger': true},
                 },
                 loading: false
             }
@@ -84,7 +91,8 @@
             },
             fetchCodeList() {
                 this.loading = true
-                this.$axios.post('code/list').then((res) => {
+                let data = {'language': this.language}
+                this.$axios.post('code/list', data).then((res) => {
                     this.code_list = res.data.data
                     this.$nextTick(() => {
                         this.loading = false

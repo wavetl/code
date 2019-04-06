@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PMRequest;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,9 +11,12 @@ class PMController extends BaseController
 {
     public function show(Request $request)
     {
-        $pm = app('App\PM')->find($request->route('id'));
+        $pm = app('App\PM')->where(['id' => $request->route('id'),'is_deleted' => false])->first();
+        if (!$pm) {
+            return redirect(route('pm_inbox'))->with('error', '这条私信已被删除');
+        }
         if ($pm->receiver_id !== Auth()->id()) {
-            return redirect()->back()->withErrors(['您没有权限查看这条私信']);
+            return redirect(route('pm_inbox'))->with('error', '您没有权限查看这条私信');
         }
         if (!$pm->is_read) {
             $pm->is_read = true;
@@ -44,9 +48,16 @@ class PMController extends BaseController
         return ['id' => $pm->id];
     }
 
+    public function delete(Request $request)
+    {
+        $pm = app('App\PM')->find($request->input('id'));
+        $pm->is_deleted = true;
+        return ['deleted' => $pm->save()];
+    }
+
     public function inbox()
     {
-        $pm_list = app('App\PM')->where('receiver_id', Auth()->id())->orderBy('created_at', 'DESC')->get();
+        $pm_list = app('App\PM')->where(['receiver_id' => Auth()->id(),'is_deleted' => false])->orderBy('created_at', 'DESC')->get();
         return view('pm/inbox', compact('pm_list'));
     }
 }

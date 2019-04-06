@@ -3,10 +3,21 @@
     <div class="card">
         <div class="card-header">
             <span><i class="fa fa-comment"></i> {{ __('pm.View') }}</span>
+            <div class="dropdown float-right">
+                <button class="btn btn-sm btn-outline-primary" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-ellipsis-h"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#" @click="deletePM({{ $pm->id }})"><span
+                                data-feather="x"></span><i class="fa fa-times"></i>  {{ __('messages.Delete') }}</a>
+                </div>
+            </div>
         </div>
         <div class="card-body">
             <div class="form-group">
-                <a href="{{ route('user_info',['id' => $pm->sender_id]) }}">{{ $pm->sender->name }}</a> 发送于 {{ $pm->created_at->diffForHumans() }}
+                <a href="{{ route('user_info',['id' => $pm->sender_id]) }}">{{ $pm->sender->name }}</a>
+                发送于 {{ $pm->created_at->diffForHumans() }}
             </div>
             <div class="form-group">
                 {!! nl2br($pm->content) !!}

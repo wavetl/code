@@ -26,10 +26,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
 
-        if(config('env') !== 'production') {
-            \URL::forceRootUrl('http://code.centos.com/');
-        }
-
         Blade::directive('top_share_users',function () {
 
             $users = app('App\User')->where('code_count','>',0)->orderBy('code_count','DESC')->get();

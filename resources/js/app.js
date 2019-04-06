@@ -32,9 +32,25 @@ const app = new Vue({
         jQuery('[data-toggle="tooltip"]').tooltip();
     },
     methods: {
+        deletePM(pm_id) {
+            Swal.fire({
+                text: '确定要删除这条私信吗？',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: '确认',
+                cancelButtonText: '取消'
+            }).then((res) => {
+                if (res.value === true) {
+                    let data = {'id' : pm_id}
+                    this.$axios.post('pm/delete',data).then((res) => {
+                      window.location.href = '/pm'
+                    })
+                }
+            });
+        },
         sendPM() {
             Swal.fire({
-                text: '确定要发送这封私信吗？',
+                text: '确定要把这条私信发送给对方吗？',
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonText: '确认',
