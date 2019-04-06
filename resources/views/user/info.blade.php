@@ -9,8 +9,8 @@
             <table class="table table-hover">
                 <tbody>
                 <tr>
-                    <td><i class="fa fa-user"></i> {{ __('userinfo.name') }}</td>
-                    <td>{{ $user->name }}</td>
+                    <td style="width: 50%;"><i class="fa fa-user"></i> {{ __('userinfo.name') }}</td>
+                    <td style="width: 50%;">{{ $user->name }}</td>
                 </tr>
                 <tr>
                     <td><i class="fa fa-clock"></i> {{ __('userinfo.created_at') }}</td>

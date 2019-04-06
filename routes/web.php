@@ -26,14 +26,21 @@ Route::get('/code/{slug}/{id}', 'CodeController@view')->name('code_view');
 Route::get('/edit/{id}', 'CodeController@edit')->name('code_edit');
 
 
+
 // USER routes
 Route::get('/user/center', 'UserController@center')->name('user_center')->middleware('auth');
 Route::get('/user/info/{id}', 'UserController@info')->name('user_info');
+Route::get('/user/edit_info', 'UserController@edit_info')->name('user_edit_info');
+
+
 
 // PM routes
 Route::get('/pm', 'PMController@inbox')->name('pm_inbox')->middleware('auth');
 Route::get('/pm/send/{id}', 'PMController@form')->name('pm_form')->middleware('auth');
 Route::get('/pm/{id}', 'PMController@show')->name('pm_show')->middleware('auth');
+
+
+
 
 // API Routes
 Route::post('/api/code/list', function (Request $request) {

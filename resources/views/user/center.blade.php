@@ -66,10 +66,10 @@
                             </tbody>
                         </table>
                         <a class="btn btn-outline-secondary" style="width: 100%;"
-                           href=""><i
+                           href="{{ route('user_edit_info') }}"><i
                                     class="fa fa-lock"></i> {{ __('usercenter.change_profile') }}</a>
                         <a class="btn btn-outline-secondary mt-1" style="width: 100%;"
-                           href="" onclick="event.preventDefault();
+                           href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();"><i
                                     class="fa fa-sign-out-alt"></i> {{ __('usercenter.Logout') }}</a>
                     </div>

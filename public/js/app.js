@@ -54808,7 +54808,7 @@ var render = function() {
                   "a",
                   { attrs: { href: "/code/" + code.slug + "/" + code.id } },
                   [
-                    _c("i", { staticClass: "fa fa-code" }),
+                    _c("i", { staticClass: "fa fa-code mr-1" }),
                     _vm._v(" " + _vm._s(code.subject))
                   ]
                 ),

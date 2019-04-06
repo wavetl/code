@@ -12,7 +12,7 @@
         <div v-else>
             <div class="card mb-3" v-for="code in code_list">
                 <div class="card-header">
-                    <a :href="'/code/' + code.slug + '/' + code.id"><i class="fa fa-code"></i> {{ code.subject
+                    <a :href="'/code/' + code.slug + '/' + code.id"><i class="fa fa-code mr-1"></i> {{ code.subject
                         }}</a>
                     <div class="float-right" v-if="is_author">
                         <a class="btn btn-outline-success btn-sm text-success" :href="'/edit/' + code.id"><i class="fa fa-edit"></i> </a>
