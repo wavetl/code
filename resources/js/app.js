@@ -41,9 +41,9 @@ const app = new Vue({
                 cancelButtonText: '取消'
             }).then((res) => {
                 if (res.value === true) {
-                    let data = {'id' : pm_id}
-                    this.$axios.post('pm/delete',data).then((res) => {
-                      window.location.href = '/pm'
+                    let data = {'id': pm_id}
+                    this.$axios.post('pm/delete', data).then((res) => {
+                        window.location.href = '/pm'
                     })
                 }
             });
@@ -77,6 +77,29 @@ const app = new Vue({
                     })
                 }
             });
+        },
+        watchUser(user_id, user_nick) {
+            Swal.fire({
+                titleText : '提示',
+                text: '确认要关注 ' + user_nick + ' 吗？',
+                type: 'question',
+                showCancelButton: true,
+                confirmButtonText: '确认',
+                cancelButtonText: '取消'
+            }).then((res) => {
+                if (res.value === true) {
+                    let data = {'user_id': user_id}
+                    this.$axios.post('user/watch', data).then((res) => {
+                        Swal.fire(
+                            '',
+                            '关注成功',
+                            'success'
+                        ).then(() => {
+                            window.location.href = '/';
+                        })
+                    })
+                }
+            })
         }
     }
 });

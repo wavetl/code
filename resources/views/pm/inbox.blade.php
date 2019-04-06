@@ -1,6 +1,6 @@
 @extends('layouts.code')
 @section('main')
-    <div class="card">
+    <div class="card mb-3">
         <div class="card-header">
             <span><i class="fa fa-comment"></i> {{ __('pm.InBox') }}</span>
         </div>

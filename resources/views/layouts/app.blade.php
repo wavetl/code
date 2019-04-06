@@ -45,7 +45,7 @@
                     <!-- Authentication Links -->
                     @guest
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('messages.Login') }}</a>
+                            <a class="nav-link" href="{{ route('login') }}"><i class="fa fa-sign-in-alt"></i> {{ __('messages.Login') }}</a>
                         </li>
                         @if (Route::has('register'))
                             <li class="nav-item">
@@ -69,6 +69,10 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('user_center') }}">
+                                    <i class="fa fa-user"></i> {{ __('messages.UserCenter') }}
+                                </a>
+                                <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

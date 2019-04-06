@@ -1808,6 +1808,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 // require component
  // require styles
 
@@ -1826,7 +1827,7 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
   components: {
     codemirror: vue_codemirror__WEBPACK_IMPORTED_MODULE_0__["codemirror"]
   },
-  props: ['name'],
+  props: ['name', 'code_id'],
   data: function data() {
     return {
       subject: '',
@@ -1869,16 +1870,31 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
         }
       });
     },
-    submitCode: function submitCode() {
+    fetchCode: function fetchCode() {
       var _this2 = this;
 
+      this.loading = true;
       var data = {
+        'code_id': this.code_id
+      };
+      this.$axios.post('code/find', data).then(function (res) {
+        _this2.subject = res.data.subject;
+        _this2.cmModel = res.data.code;
+
+        _this2.changeCodeLanguage(res.data.language);
+      });
+    },
+    submitCode: function submitCode() {
+      var _this3 = this;
+
+      var data = {
+        'id': this.code_id,
         'subject': this.subject,
         'code': this.cmModel,
         'language': this.code_language.id
       };
       this.$axios.post('code/save', data).then(function (res) {
-        Swal.fire('分享成功', '你的代码已经成功分享', 'success').then(function () {
+        Swal.fire(_this3.code_id ? '修改成功' : '分享成功', _this3.code_id ? '代码修改成功' : '你的代码已经成功分享', 'success').then(function () {
           window.location.href = '/';
         });
       })["catch"](function (error) {
@@ -1887,15 +1903,21 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
           Swal.fire('提交失败', error.response.data.errors[obj][0], 'error');
         }
 
-        _this2.isCommentting = false;
+        _this3.isCommentting = false;
       });
     }
   },
   mounted: function mounted() {
-    this.$refs['subject'].focus();
+    if (!this.code_id) {
+      this.$refs['subject'].focus();
+    }
   },
   created: function created() {
-    this.changeCodeLanguage('php');
+    if (this.code_id) {
+      this.fetchCode();
+    } else {
+      this.changeCodeLanguage('php');
+    }
   },
   watch: {
     code_language: function code_language(val, oldVal) {
@@ -1967,6 +1989,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 // require component
  // require styles
 
@@ -1978,13 +2003,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'code_list',
   components: {
     codemirror: vue_codemirror__WEBPACK_IMPORTED_MODULE_0__["codemirror"],
     'grid-loader': vue_spinner_src_GridLoader_vue__WEBPACK_IMPORTED_MODULE_8__["default"]
   },
-  props: ['code_id', 'language'],
+  props: ['code_id', 'language', 'user_id', 'is_author'],
   data: function data() {
     return {
       code_list: [],
@@ -2030,33 +2058,53 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    fetchCode: function fetchCode() {
+    deleteCode: function deleteCode(code_id) {
       var _this = this;
+
+      Swal.fire({
+        text: '确定要删除这段代码吗？',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: '确认',
+        cancelButtonText: '取消'
+      }).then(function (res) {
+        var data = {
+          'id': code_id
+        };
+
+        _this.$axios.post('code/delete', data).then(function (res) {
+          window.location.href = '/';
+        });
+      });
+    },
+    fetchCode: function fetchCode() {
+      var _this2 = this;
 
       this.loading = true;
       var data = {
         'code_id': this.code_id
       };
       this.$axios.post('code/find', data).then(function (res) {
-        _this.code_list = [res.data];
+        _this2.code_list = [res.data];
 
-        _this.$nextTick(function () {
-          _this.loading = false;
+        _this2.$nextTick(function () {
+          _this2.loading = false;
         });
       });
     },
     fetchCodeList: function fetchCodeList() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.loading = true;
       var data = {
-        'language': this.language
+        'language': this.language,
+        'user_id': this.user_id
       };
       this.$axios.post('code/list', data).then(function (res) {
-        _this2.code_list = res.data.data;
+        _this3.code_list = res.data.data;
 
-        _this2.$nextTick(function () {
-          _this2.loading = false;
+        _this3.$nextTick(function () {
+          _this3.loading = false;
         });
       });
     },
@@ -54598,7 +54646,7 @@ var render = function() {
         ],
         ref: "subject",
         staticClass: "form-control input-md",
-        attrs: { type: "text", name: "subject", autofocus: "", required: "" },
+        attrs: { type: "text", name: "subject", required: "" },
         domProps: { value: _vm.subject },
         on: {
           input: function($event) {
@@ -54643,7 +54691,15 @@ var render = function() {
             attrs: { type: "button" },
             on: { click: _vm.submitCode }
           },
-          [_c("i", { staticClass: "fa fa-check" }), _vm._v(" 提交代码")]
+          [
+            _c("i", { staticClass: "fa fa-check" }),
+            _vm._v(" "),
+            _c("span", {
+              domProps: {
+                textContent: _vm._s(_vm.code_id ? "修改代码" : "提交代码")
+              }
+            })
+          ]
         ),
         _vm._v(" "),
         _c(
@@ -54724,43 +54780,65 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _vm.loading
-        ? _c(
-            "div",
-            { staticStyle: { height: "350px" } },
-            [
-              _c("grid-loader", {
-                staticClass: "justify-content-center",
-                staticStyle: { margin: "35% auto 0px auto" },
-                attrs: {
-                  width: "100%",
-                  height: "500px",
-                  loading: true,
-                  color: "#5dc596"
-                }
-              })
-            ],
-            1
-          )
-        : _c("transition", { attrs: { name: "fade" } }, [
-            _c(
-              "div",
-              _vm._l(_vm.code_list, function(code) {
-                return _c("div", { staticClass: "card mb-3" }, [
-                  _c("div", { staticClass: "card-header" }, [
-                    _c(
-                      "a",
-                      { attrs: { href: "/code/" + code.slug + "/" + code.id } },
-                      [
-                        _c("i", { staticClass: "fa fa-code" }),
-                        _vm._v(" " + _vm._s(code.subject))
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "float-right" }, [
+  return _c("div", [
+    _vm.loading
+      ? _c(
+          "div",
+          { staticStyle: { height: "350px" } },
+          [
+            _c("grid-loader", {
+              staticClass: "justify-content-center",
+              staticStyle: { margin: "35% auto 0px auto" },
+              attrs: {
+                width: "100%",
+                height: "500px",
+                loading: true,
+                color: "#3490dc"
+              }
+            })
+          ],
+          1
+        )
+      : _c(
+          "div",
+          _vm._l(_vm.code_list, function(code) {
+            return _c("div", { staticClass: "card mb-3" }, [
+              _c("div", { staticClass: "card-header" }, [
+                _c(
+                  "a",
+                  { attrs: { href: "/code/" + code.slug + "/" + code.id } },
+                  [
+                    _c("i", { staticClass: "fa fa-code" }),
+                    _vm._v(" " + _vm._s(code.subject))
+                  ]
+                ),
+                _vm._v(" "),
+                _vm.is_author
+                  ? _c("div", { staticClass: "float-right" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass:
+                            "btn btn-outline-success btn-sm text-success",
+                          attrs: { href: "/edit/" + code.id }
+                        },
+                        [_c("i", { staticClass: "fa fa-edit" })]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-outline-danger btn-sm",
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteCode(code.id)
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "fa fa-trash" })]
+                      )
+                    ])
+                  : _c("span", { staticClass: "float-right" }, [
                       _c("i", { staticClass: "fa fa-user" }),
                       _vm._v(" "),
                       _c(
@@ -54769,53 +54847,48 @@ var render = function() {
                         [_vm._v(_vm._s(code.user.name))]
                       )
                     ])
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "card-body" },
-                    [
-                      _c("codemirror", {
-                        attrs: {
-                          value: code.code,
-                          options: _vm.getOptions(code.language)
-                        }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "card-footer" }, [
-                    _c(
-                      "span",
-                      {
-                        staticClass: "mr-2",
-                        class: _vm.cssClassMapping[code.language]
-                      },
-                      [
-                        _c("i", { class: "fab fa-" + code.language }),
-                        _vm._v(
-                          " " +
-                            _vm._s(
-                              _vm.code_language_mapping[code.language].name
-                            )
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "text-secondary float-right" }, [
-                      _c("i", { staticClass: "fa fa-clock" }),
-                      _vm._v(" " + _vm._s(code.created_at))
-                    ])
-                  ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "card-body code-body" },
+                [
+                  _c("codemirror", {
+                    attrs: {
+                      value: code.code,
+                      options: _vm.getOptions(code.language)
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "card-footer" }, [
+                _c(
+                  "span",
+                  {
+                    staticClass: "mr-2",
+                    class: _vm.cssClassMapping[code.language]
+                  },
+                  [
+                    _c("i", { class: "fab fa-" + code.language }),
+                    _vm._v(
+                      " " +
+                        _vm._s(_vm.code_language_mapping[code.language].name)
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c("span", { staticClass: "text-secondary float-right" }, [
+                  _c("i", { staticClass: "fa fa-clock" }),
+                  _vm._v(" " + _vm._s(code.created_at))
                 ])
-              }),
-              0
-            )
-          ])
-    ],
-    1
-  )
+              ])
+            ])
+          }),
+          0
+        )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -67134,6 +67207,30 @@ var app = new Vue({
               var obj = _Object$keys[_i];
               Swal.fire('提交失败', error.response.data.errors[obj][0], 'error');
             }
+          });
+        }
+      });
+    },
+    watchUser: function watchUser(user_id, user_nick) {
+      var _this3 = this;
+
+      Swal.fire({
+        titleText: '提示',
+        text: '确认要关注 ' + user_nick + ' 吗？',
+        type: 'question',
+        showCancelButton: true,
+        confirmButtonText: '确认',
+        cancelButtonText: '取消'
+      }).then(function (res) {
+        if (res.value === true) {
+          var data = {
+            'user_id': user_id
+          };
+
+          _this3.$axios.post('user/watch', data).then(function (res) {
+            Swal.fire('', '关注成功', 'success').then(function () {
+              window.location.href = '/';
+            });
           });
         }
       });

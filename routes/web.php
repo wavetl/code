@@ -24,9 +24,11 @@ Route::get('/', 'CodeController@index')->name('home');
 Route::get('/code/language/{language}', 'CodeController@index')->name('code_language');
 Route::get('/code/share', 'CodeController@share')->name('code_share')->middleware('auth');
 Route::get('/code/{slug}/{id}', 'CodeController@view')->name('code_view');
+Route::get('/edit/{id}', 'CodeController@edit')->name('code_edit');
 
 
 // USER routes
+Route::get('/user/center', 'UserController@center')->name('user_center')->middleware('auth');
 Route::get('/user/info/{id}', 'UserController@info')->name('user_info');
 
 // PM routes
@@ -36,14 +38,19 @@ Route::get('/pm/{id}', 'PMController@show')->name('pm_show')->middleware('auth')
 
 // API Routes
 Route::post('/api/code/list', function (Request $request) {
+
     $resource = Code::with(['user']);
     if ($request->input('language')) {
         $resource->where('language', $request->input('language'));
+    }
+    if ($request->input('user_id')) {
+        $resource->where('user_id',$request->input('user_id'));
     }
     $resource->orderBy('created_at', 'DESC');
     return new CodeResource($resource->get());
 })->name('api_code_list');
 Route::post('/api/code/save', 'CodeController@save')->name('api_code_save')->middleware('auth');
 Route::post('/api/code/find', 'CodeController@find')->name('api_code_find');
+Route::post('/api/code/delete', 'CodeController@delete')->name('api_code_delete')->middleware('auth');
 Route::post('/api/pm/send', 'PMController@send')->name('api_pm_send')->middleware('auth');
 Route::post('/api/pm/delete', 'PMController@delete')->name('api_pm_delete')->middleware('auth');

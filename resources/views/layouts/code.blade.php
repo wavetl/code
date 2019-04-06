@@ -45,8 +45,8 @@
                     </div>
                 </div>
 
-                <div class="card mt-3 border-info">
-                    <div class="card-header bg-info"><strong class="text-white">代码分类</strong></div>
+                <div class="card mt-3 border-primary">
+                    <div class="card-header bg-primary"><strong class="text-white">代码分类</strong></div>
                     <div class="card-body ">
                         @if($language === 'php')
                             <a href="{{ route('home') }}" class="btn btn-info"><i

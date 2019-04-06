@@ -1,13 +1,13 @@
 @extends('layouts.code')
 @section('main')
-    <div class="card">
+    <div class="card mb-3">
         <div class="card-header">
             <span><i class="fa fa-paper-plane"></i> {{ __('pm.PM') }}</span>
         </div>
         <div class="card-body">
             <div class="form-group">
                 <label>{{ __('pm.receiver_name') }}</label>
-                <span class="ml-3">{{ $receiver->name }}</span>
+                <a class="ml-3" href="{{ route('user_info',['id' => $receiver->id]) }}">{{ $receiver->name }}</a>
             </div>
             <div class="form-group">
                 <textarea class="form-control" ref="content" rows="4" name="content" placeholder="输入私信内容"></textarea>

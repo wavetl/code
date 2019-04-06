@@ -28,16 +28,30 @@
   font-family: Arial, monospace;
   font-size: 14px;
 }
-.card-header a:link,.card-header a:visited {
-  color:#000;
-}
-.card-header a:hover,.card-header a:active {
+
+.card-header a:link, .card-header a:visited {
   color: #000;
 }
 
-.card-footer a:link,.card-footer a:visited {
-  color:#000;
-}
-.card-footer a:hover,.card-footer a:active {
+.card-header a:hover, .card-header a:active {
   color: #000;
+}
+
+.card-footer a:link, .card-footer a:visited {
+  color: #000;
+}
+
+.card-footer a:hover, .card-footer a:active {
+  color: #000;
+}
+
+.code-body {
+  padding: 10px;
+}
+
+.card {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+.my-code-list .code-body {
+  padding:0px;
 }

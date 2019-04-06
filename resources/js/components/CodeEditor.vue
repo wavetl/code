@@ -5,13 +5,14 @@
 <template>
     <div>
         <div class="form-group">
-            <input type="text" ref="subject" v-model="subject" name="subject" class="form-control input-md" autofocus required/>
+            <input type="text" ref="subject" v-model="subject" name="subject" class="form-control input-md"
+                   required/>
         </div>
         <div class="form-group">
             <codemirror v-model="cmModel" :options="cmOptions"></codemirror>
         </div>
         <div class="form-group text-center" style="position:relative;">
-            <button type="button" @click="submitCode" class="btn btn-success"><i class="fa fa-check"></i> 提交代码</button>
+            <button type="button" @click="submitCode" class="btn btn-success"><i class="fa fa-check"></i> <span v-text="code_id ? '修改代码' : '提交代码'"></span></button>
             <a class="btn btn-outline-secondary" href="/">取消</a>
 
             <a id="navbarDropdown" class="dropdown-toggle btn btn-xs btn-outline-info" href="#" role="button"
@@ -47,15 +48,15 @@
         components: {
             codemirror
         },
-        props: ['name'],
+        props: ['name', 'code_id'],
         data() {
             return {
                 subject: '',
                 code_language: {},
                 code_language_list: [
-                    {'id': 'php', 'name':'PHP', 'mime': 'application/x-httpd-php', 'theme': 'cobalt'},
-                    {'id': 'js', 'name' : 'JavaScript','mime': 'text/javascript', 'theme': 'solarized light'},
-                    {'id': 'python','name' : 'Python', 'mime': 'text/x-python', 'theme': 'material'}
+                    {'id': 'php', 'name': 'PHP', 'mime': 'application/x-httpd-php', 'theme': 'cobalt'},
+                    {'id': 'js', 'name': 'JavaScript', 'mime': 'text/javascript', 'theme': 'solarized light'},
+                    {'id': 'python', 'name': 'Python', 'mime': 'text/x-python', 'theme': 'material'}
                 ],
                 cmModel: null,
                 cmOptions: {
@@ -77,8 +78,18 @@
                     }
                 });
             },
+            fetchCode() {
+                this.loading = true
+                let data = {'code_id': this.code_id}
+                this.$axios.post('code/find', data).then((res) => {
+                    this.subject = res.data.subject;
+                    this.cmModel = res.data.code;
+                    this.changeCodeLanguage(res.data.language);
+                })
+            },
             submitCode() {
                 let data = {
+                    'id' : this.code_id,
                     'subject': this.subject,
                     'code': this.cmModel,
                     'language': this.code_language.id,
@@ -86,8 +97,8 @@
                 this.$axios.post('code/save', data).then((res) => {
 
                     Swal.fire(
-                        '分享成功',
-                        '你的代码已经成功分享',
+                        this.code_id ? '修改成功' : '分享成功',
+                        this.code_id ? '代码修改成功' : '你的代码已经成功分享',
                         'success'
                     ).then(() => {
                         window.location.href = '/';
@@ -106,10 +117,16 @@
             },
         },
         mounted() {
-            this.$refs['subject'].focus();
+            if(!this.code_id) {
+                this.$refs['subject'].focus();
+            }
         },
         created() {
-            this.changeCodeLanguage('php');
+            if (this.code_id) {
+                this.fetchCode();
+            } else {
+                this.changeCodeLanguage('php');
+            }
         },
         watch: {
             code_language(val, oldVal) {

@@ -7,6 +7,12 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends BaseController
 {
+    public function center()
+    {
+        $user = Auth::user();
+        return view('user/center',compact('user'));
+    }
+
     public function info(Request $request)
     {
         $user = app('App\User')->find($request->route('id'));

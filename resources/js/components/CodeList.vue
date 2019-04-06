@@ -6,29 +6,32 @@
     <div>
         <div style="height:350px;" v-if="loading">
             <grid-loader class="justify-content-center" :width="'100%'" :height="'500px'" :loading="true"
-                         :color="'#5dc596'"
+                         :color="'#3490dc'"
                          style="margin:35% auto 0px auto;"></grid-loader>
         </div>
-        <transition name="fade" v-else>
-            <div>
-                <div class="card mb-3" v-for="code in code_list">
-                    <div class="card-header">
-                        <a :href="'/code/' + code.slug + '/' + code.id"><i class="fa fa-code"></i> {{ code.subject
-                            }}</a>
-                        <span class="float-right"><i class="fa fa-user"></i>  <a :href="'/user/info/' + code.user.id">{{ code.user.name }}</a></span>
+        <div v-else>
+            <div class="card mb-3" v-for="code in code_list">
+                <div class="card-header">
+                    <a :href="'/code/' + code.slug + '/' + code.id"><i class="fa fa-code"></i> {{ code.subject
+                        }}</a>
+                    <div class="float-right" v-if="is_author">
+                        <a class="btn btn-outline-success btn-sm text-success" :href="'/edit/' + code.id"><i class="fa fa-edit"></i> </a>
+                        <button class="btn btn-outline-danger btn-sm" @click="deleteCode(code.id)"><i class="fa fa-trash"></i> </button>
                     </div>
-                    <div class="card-body">
-                        <codemirror :value="code.code" :options="getOptions(code.language)"></codemirror>
-                    </div>
-                    <div class="card-footer">
+                    <span class="float-right" v-else><i class="fa fa-user"></i>  <a
+                            :href="'/user/info/' + code.user.id">{{ code.user.name }}</a></span>
+                </div>
+                <div class="card-body code-body">
+                    <codemirror :value="code.code" :options="getOptions(code.language)"></codemirror>
+                </div>
+                <div class="card-footer">
                         <span class="mr-2" :class="cssClassMapping[code.language]"><i
                                 :class="'fab fa-' + code.language"></i> {{ code_language_mapping[code.language].name }}</span>
-                        <span class="text-secondary float-right"><i
-                                class="fa fa-clock"></i> {{ code.created_at }}</span>
-                    </div>
+                    <span class="text-secondary float-right"><i
+                            class="fa fa-clock"></i> {{ code.created_at }}</span>
                 </div>
             </div>
-        </transition>
+        </div>
     </div>
 </template>
 
@@ -47,13 +50,15 @@
 
     import GridLoader from 'vue-spinner/src/GridLoader.vue'
 
+    const Swal = require('sweetalert2')
+
     export default {
         name: 'code_list',
         components: {
             codemirror,
             'grid-loader': GridLoader
         },
-        props: ['code_id', 'language'],
+        props: ['code_id', 'language', 'user_id', 'is_author'],
         data() {
             return {
                 code_list: [],
@@ -79,6 +84,20 @@
             }
         },
         methods: {
+            deleteCode(code_id) {
+                Swal.fire({
+                    text: '确定要删除这段代码吗？',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: '确认',
+                    cancelButtonText: '取消'
+                }).then((res) => {
+                    let data = {'id': code_id}
+                    this.$axios.post('code/delete', data).then((res) => {
+                        window.location.href = '/'
+                    })
+                });
+            },
             fetchCode() {
                 this.loading = true
                 let data = {'code_id': this.code_id}
@@ -91,7 +110,7 @@
             },
             fetchCodeList() {
                 this.loading = true
-                let data = {'language': this.language}
+                let data = {'language': this.language, 'user_id': this.user_id}
                 this.$axios.post('code/list', data).then((res) => {
                     this.code_list = res.data.data
                     this.$nextTick(() => {

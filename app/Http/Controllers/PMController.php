@@ -6,12 +6,13 @@ use App\Http\Requests\PMRequest;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 
 class PMController extends BaseController
 {
     public function show(Request $request)
     {
-        $pm = app('App\PM')->where(['id' => $request->route('id'),'is_deleted' => false])->first();
+        $pm = app('App\PM')->where(['id' => $request->route('id'), 'is_deleted' => false])->first();
         if (!$pm) {
             return redirect(route('pm_inbox'))->with('error', '这条私信已被删除');
         }
@@ -39,6 +40,10 @@ class PMController extends BaseController
     {
         $validated = $request->validated();
 
+        if ($validated['receiver_id'] == Auth::id()) {
+            return Response::json(['errors' => ['content' => ['您无法给自己发送私信']]], 422);
+        }
+
         $pm = app('App\PM');
         $pm->receiver_id = $validated['receiver_id'];
         $pm->sender_id = Auth::id();
@@ -57,7 +62,7 @@ class PMController extends BaseController
 
     public function inbox()
     {
-        $pm_list = app('App\PM')->where(['receiver_id' => Auth()->id(),'is_deleted' => false])->orderBy('created_at', 'DESC')->get();
+        $pm_list = app('App\PM')->where(['receiver_id' => Auth()->id(), 'is_deleted' => false])->orderBy('created_at', 'DESC')->get();
         return view('pm/inbox', compact('pm_list'));
     }
 }

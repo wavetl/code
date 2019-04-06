@@ -19,6 +19,7 @@ class BaseController extends Controller
     public function resetViewData()
     {
         View()->share('unread_pm_count', app('App\PM')->where(['receiver_id' => Auth()->id(), 'is_read' => false])->count());
+        View()->share('language','');
     }
 
 }
