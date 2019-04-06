@@ -4,10 +4,8 @@
 
 <template>
     <div>
-        <div style="height:350px;" v-if="loading">
-            <grid-loader class="justify-content-center" :width="'100%'" :height="'500px'" :loading="true"
-                         :color="'#3490dc'"
-                         style="margin:35% auto 0px auto;"></grid-loader>
+        <div class="spinner-container" v-if="loading">
+            <spinner :loading="true" :color="'#3490dc'"></spinner>
         </div>
         <div v-else>
             <div class="card mb-3" v-for="code in code_list">
@@ -48,7 +46,7 @@
     import 'codemirror/mode/php/php.js'
     import 'codemirror/mode/python/python.js'
 
-    import GridLoader from 'vue-spinner/src/GridLoader.vue'
+    import FadeLoader from 'vue-spinner/src/FadeLoader'
 
     const Swal = require('sweetalert2')
 
@@ -56,7 +54,7 @@
         name: 'code_list',
         components: {
             codemirror,
-            'grid-loader': GridLoader
+            'spinner': FadeLoader
         },
         props: ['code_id', 'language', 'user_id', 'is_author'],
         data() {

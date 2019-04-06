@@ -15,5 +15,8 @@ return [
 
     'failed' => 'These credentials do not match our records.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
-
+    'EditInfo' => '修改信息',
+    'UpdateInfo' => '更新信息',
+    'password_confirmation' => '确认密码',
+    'nick_name' => '昵称'
 ];

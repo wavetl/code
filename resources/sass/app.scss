@@ -52,6 +52,14 @@
 .card {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
+
 .my-code-list .code-body {
-  padding:0px;
+  padding: 0px;
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 350px;
 }
