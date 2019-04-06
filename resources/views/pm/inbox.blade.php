@@ -2,7 +2,7 @@
 @section('main')
     <div class="card mb-3">
         <div class="card-header">
-            <span><i class="fa fa-comment"></i> {{ __('pm.InBox') }}</span>
+            <span><i class="fa fa-inbox"></i> {{ __('pm.InBox') }}</span>
         </div>
         <div class="card-body">
             @if($pm_list->count() === 0)

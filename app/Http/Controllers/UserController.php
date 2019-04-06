@@ -32,7 +32,7 @@ class UserController extends BaseController
         $user = app('auth')->user();
         $exists = app('user')->where('name', $validated['name'])->first();
         if ($exists && $exists->id !== $user->id) {
-            return redirect()->back()->with('error', '该昵称已经存在');
+            return redirect()->back()->with('error', '该昵称已被使用');
         }
 
         $user->password = bcrypt($validated['password']);

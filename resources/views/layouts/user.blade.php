@@ -36,7 +36,7 @@
                                 class="text-white"><i class="fa fa-user"></i> {{ __('usercenter.MyProfile') }}</strong>
                     </div>
                     <div class="card-body">
-                        <table class="table table-hover">
+                        <table class="table">
                             <tbody>
                             <tr>
                                 <td><i class="fa fa-user"></i> {{ __('userinfo.name') }}</td>
@@ -61,7 +61,7 @@
                         <a class="btn btn-outline-success" style="width: 100%;"
                            href="{{ route('user_edit_info') }}"><i
                                     class="fa fa-user-edit"></i> {{ __('usercenter.change_profile') }}</a>
-                        <a class="btn btn-outline-success mt-1" style="width: 100%;"
+                        <a class="btn btn-outline-danger mt-1" style="width: 100%;"
                            href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();"><i
                                     class="fa fa-sign-out-alt"></i> {{ __('usercenter.Logout') }}</a>
@@ -69,10 +69,20 @@
                 </div>
                 <div class="card border-info mb-3">
                     <div class="card-header bg-info">
-                        <strong class="text-white">{{ __('pm.InBox') }}</strong>
+                        <strong class="text-white"><i class="fa fa-inbox"></i> {{ __('pm.InBox') }}</strong>
                     </div>
                     <div class="card-body">
-
+                        <p class="text-center">
+                            @if($unread_pm_count === 0)
+                                <span class="text-muted">没有未读的私信</span>
+                            @else
+                                您有 {{ $unread_pm_count }} 条未读的私信
+                            @endif
+                        </p>
+                        <a href="{{ route('pm_inbox') }}" class="btn btn-outline-info"
+                           style="width: 100%;">
+                            {{ __('usercenter.enter_inbox') }}
+                        </a>
                     </div>
                 </div>
             </div>
