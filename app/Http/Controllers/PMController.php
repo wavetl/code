@@ -12,7 +12,7 @@ class PMController extends BaseController
 {
     public function show(Request $request)
     {
-        $pm = app('App\PM')->where(['id' => $request->route('id'), 'is_deleted' => false])->first();
+        $pm = app('pm')->where(['id' => $request->route('id'), 'is_deleted' => false])->first();
         if (!$pm) {
             return redirect(route('pm_inbox'))->with('error', '这条私信已被删除');
         }
@@ -32,7 +32,7 @@ class PMController extends BaseController
 
     public function form(Request $request)
     {
-        $receiver = app('App\User')->find($request->route('id'));
+        $receiver = app('user')->find($request->route('id'));
         return view('pm/send', compact('receiver'));
     }
 
@@ -44,7 +44,7 @@ class PMController extends BaseController
             return Response::json(['errors' => ['content' => ['您无法给自己发送私信']]], 422);
         }
 
-        $pm = app('App\PM');
+        $pm = app('pm')->make();
         $pm->receiver_id = $validated['receiver_id'];
         $pm->sender_id = Auth::id();
         $pm->content = $validated['content'];
@@ -55,14 +55,14 @@ class PMController extends BaseController
 
     public function delete(Request $request)
     {
-        $pm = app('App\PM')->find($request->input('id'));
+        $pm = app('pm')->find($request->input('id'));
         $pm->is_deleted = true;
         return ['deleted' => $pm->save()];
     }
 
     public function inbox()
     {
-        $pm_list = app('App\PM')->where(['receiver_id' => Auth()->id(), 'is_deleted' => false])->orderBy('created_at', 'DESC')->get();
+        $pm_list = app('pm')->where(['receiver_id' => Auth()->id(), 'is_deleted' => false])->orderBy('created_at', 'DESC')->get();
         return view('pm/inbox', compact('pm_list'));
     }
 }

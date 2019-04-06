@@ -13,7 +13,6 @@
 
 
 use App\Http\Resources\CodeResource;
-use App\Code;
 use Illuminate\Http\Request;
 
 Auth::routes();
@@ -39,7 +38,7 @@ Route::get('/pm/{id}', 'PMController@show')->name('pm_show')->middleware('auth')
 // API Routes
 Route::post('/api/code/list', function (Request $request) {
 
-    $resource = Code::with(['user']);
+    $resource = app('code')::with(['user']);
     if ($request->input('language')) {
         $resource->where('language', $request->input('language'));
     }

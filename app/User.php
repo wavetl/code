@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -41,6 +40,6 @@ class User extends Authenticatable
 
 
     public function getLoggedAtAttribute($value){
-        return is_null($value)  ? '' : app('Illuminate\Support\Carbon')::createFromFormat('Y-m-d H:i:s', $value)->diffForHumans();
+        return is_null($value)  ? '' : app('Carbon')::createFromFormat('Y-m-d H:i:s', $value)->diffForHumans();
     }
 }

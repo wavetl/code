@@ -15,4 +15,9 @@ class Code extends Model
     {
         return parent::toArray();
     }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return app('Carbon')->createFromFormat('Y-m-d H:i:s',$value)->diffForHumans();
+    }
 }
