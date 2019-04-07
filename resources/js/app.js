@@ -33,6 +33,22 @@ const app = new Vue({
         jQuery('[data-toggle="tooltip"]').tooltip();
     },
     methods: {
+        deleteCode(code_id) {
+            Swal.fire({
+                text: '确定要删除这段代码吗？',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: '确认',
+                cancelButtonText: '取消'
+            }).then((res) => {
+                if (res.value) {
+                    let data = {'id': code_id}
+                    this.$axios.post('code/delete', data).then((res) => {
+                        window.location.href = '/'
+                    })
+                }
+            });
+        },
         deletePM(pm_id) {
             Swal.fire({
                 text: '确定要删除这条私信吗？',
@@ -81,7 +97,7 @@ const app = new Vue({
         },
         watchUser(user_id, user_nick) {
             Swal.fire({
-                titleText : '提示',
+                titleText: '提示',
                 text: '确认要关注 ' + user_nick + ' 吗？',
                 type: 'question',
                 showCancelButton: true,

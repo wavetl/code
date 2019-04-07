@@ -125,20 +125,6 @@
           console.log(this.$el.innerHTML)
         },
         methods: {
-            deleteCode(code_id) {
-                Swal.fire({
-                    text: '确定要删除这段代码吗？',
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: '确认',
-                    cancelButtonText: '取消'
-                }).then((res) => {
-                    let data = {'id': code_id}
-                    this.$axios.post('code/delete', data).then((res) => {
-                        window.location.href = '/'
-                    })
-                });
-            },
             fetchCode() {
                 this.loading = true
                 let data = {'code_id': this.code_id}

@@ -62,6 +62,7 @@ class CodeController extends BaseController
             $user->save();
 
             Artisan::call('view:clear');
+            cache()->delete('total_shares');
         }
         return ['code_id' => $code->id];
     }
@@ -97,6 +98,7 @@ class CodeController extends BaseController
             $user->save();
 
             Artisan::call('view:clear');
+            cache()->delete('total_shares');
         }
 
         return $data;
