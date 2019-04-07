@@ -41,7 +41,7 @@ class PMController extends BaseController
         $validated = $request->validated();
 
         if ($validated['receiver_id'] == Auth::id()) {
-            return Response::json(['errors' => ['content' => ['您无法给自己发送私信']]], 422);
+            return Response::json(['errors' => ['content' => ['无法给自己发送私信']]], 422);
         }
 
         $pm = app('pm')->make();

@@ -45,9 +45,8 @@
         </div>
     </div>
 
-    <div class="card border-info mb-3">
-        <div class="card-header bg-info"><strong
-                    class="text-white"><i class="fa fa-code"></i> {{ __('userinfo.UserCodeList',['name' => $user->name]) }}</strong>
+    <div class="card mb-3">
+        <div class="card-header"><strong><i class="fa fa-code"></i> {{ __('userinfo.UserCodeList',['name' => $user->name]) }}</strong>
         </div>
         <div class="card-body my-code-list">
             <code_list :user_id="'{{ $user->id }}'"/>

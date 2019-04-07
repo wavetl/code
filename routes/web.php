@@ -46,15 +46,15 @@ Route::get('/pm/{id}', 'PMController@show')->name('pm_show')->middleware('auth')
 // API Routes
 Route::post('/api/code/list', function (Request $request) {
 
-    $resource = app('code')::with(['user']);
+    $users = app('code')::with(['user']);
     if ($request->input('language')) {
-        $resource->where('language', $request->input('language'));
+        $users->where('language', $request->input('language'));
     }
     if ($request->input('user_id')) {
-        $resource->where('user_id',$request->input('user_id'));
+        $users->where('user_id',$request->input('user_id'));
     }
-    $resource->orderBy('created_at', 'DESC');
-    return new CodeResource($resource->get());
+    $users->orderBy('created_at', 'DESC');
+    return new CodeResource($users->paginate(config()->get('app.per_page')));
 })->name('api_code_list');
 Route::post('/api/code/save', 'CodeController@save')->name('api_code_save')->middleware('auth');
 Route::post('/api/code/find', 'CodeController@find')->name('api_code_find');

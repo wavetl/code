@@ -36,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
             $users = app('user')->where('code_count','>',0)->orderBy('code_count','DESC')->get();
             $html = '<ul style="list-style-type: none;" class="pl-0">';
             foreach ($users as $user) {
-                $html .= '<li><i class="fa fa-user mr-1"></i> <a class="text-success" href="' . route('user_info',['id' => $user->id]) . '">' . $user->name . '</a> (' . $user->code_count . ')</li>';
+                $html .= '<li><i class="fa fa-user mr-2"></i> <a class="text-success" href="' . route('user_info',['id' => $user->id]) . '">' . $user->name . '</a> (' . $user->code_count . ')</li>';
             }
             $html .= '</u>';
             return $html;
