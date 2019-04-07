@@ -121,6 +121,9 @@
                 this.fetchCodeList()
             }
         },
+        mounted() {
+          console.log(this.$el.innerHTML)
+        },
         methods: {
             deleteCode(code_id) {
                 Swal.fire({

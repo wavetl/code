@@ -33,15 +33,19 @@
                    class="btn btn-outline-danger"><i
                             class="fab fa-python"></i> Python</a>
             @endif
-                @if($language === 'css')
-                    <a href="{{ route('code_language',['language' => 'css']) }}" class="btn btn-info"><i
-                                class="fab fa-css"></i> CSS</a>
-                @else
-                    <a href="{{ route('code_language',['language' => 'css']) }}"
-                       class="btn btn-outline-info"><i
-                                class="fab fa-css"></i> CSS</a>
-                @endif
+            @if($language === 'css')
+                <a href="{{ route('code_language',['language' => 'css']) }}" class="btn btn-info"><i
+                            class="fab fa-css"></i> CSS</a>
+            @else
+                <a href="{{ route('code_language',['language' => 'css']) }}"
+                   class="btn btn-outline-info"><i
+                            class="fab fa-css"></i> CSS</a>
+            @endif
         </div>
     </div>
-<code_list :language="'{{ $language }}'" :page="{{ (int)request()->input('page') }}" />
+    @foreach($code_list as $code)
+        @component('code.code',['code' => $code])
+        @endcomponent
+    @endforeach
+    {{ $code_list->links() }}
 @endsection

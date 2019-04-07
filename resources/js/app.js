@@ -16,6 +16,7 @@ Vue.prototype.$axios = axios.create({'baseURL': '/api'});
 
 Vue.component('code_list', require('./components/CodeList').default);
 Vue.component('code_editor', require('./components/CodeEditor').default);
+Vue.component('code_view', require('./components/CodeView').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

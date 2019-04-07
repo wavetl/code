@@ -18,7 +18,9 @@ class CodeController extends BaseController
     public function index(Request $request)
     {
         $language = $request->route('language');
-        return view('home', compact('language'));
+        $code_list = app('code')::getCodeList($language);
+
+        return view('home', compact('code_list', 'language'));
     }
 
     public function share()
@@ -29,7 +31,7 @@ class CodeController extends BaseController
     public function edit(Request $request)
     {
         $code = app('code')::find($request->route('id'));
-        if($code->user_id !== app('auth')->id()) {
+        if ($code->user_id !== app('auth')->id()) {
             return redirect('/')->withErrors(['权限不足']);
         }
         return view('code/edit', compact('code'));
@@ -83,7 +85,7 @@ class CodeController extends BaseController
         $code = app('code')::find($request->input('id'));
 
         if ($code->user_id !== Auth::id()) {
-            return Response()->json(['error' => '权限不足'],403);
+            return Response()->json(['error' => '权限不足'], 403);
         }
 
         $data = ['deleted' => $code->delete()];

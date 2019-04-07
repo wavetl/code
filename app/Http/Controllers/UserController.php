@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UpdateInfoRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends BaseController
 {
@@ -35,7 +36,7 @@ class UserController extends BaseController
             return redirect()->back()->with('error', '该昵称已被使用');
         }
 
-        $user->password = bcrypt($validated['password']);
+        $user->password = Hash::make($validated['password']);
         $user->save();
 
         return redirect()->back()->with('success', '个人信息修改成功');

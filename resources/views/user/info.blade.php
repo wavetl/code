@@ -29,9 +29,6 @@
                 @if(!Auth()->guest() && $user->id !== Auth()->id())
                     <tr>
                         <td>
-                            <button @click="watchUser({{ $user->id }},'{{ $user->name }}')"
-                                    class="btn btn-outline-success"><i
-                                        class="far fa-star"></i> {{ __('userinfo.follow') }}</button>
                         </td>
                         <td>
                             <a href="{{ route('pm_form',['id' => $user->id]) }}"
@@ -46,7 +43,8 @@
     </div>
 
     <div class="card mb-3">
-        <div class="card-header"><strong><i class="fa fa-code"></i> {{ __('userinfo.UserCodeList',['name' => $user->name]) }}</strong>
+        <div class="card-header"><strong><i
+                        class="fa fa-code"></i> {{ __('userinfo.UserCodeList',['name' => $user->name]) }}</strong>
         </div>
         <div class="card-body my-code-list">
             <code_list :user_id="'{{ $user->id }}'"/>

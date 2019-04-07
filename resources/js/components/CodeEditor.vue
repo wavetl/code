@@ -9,13 +9,18 @@
                    required/>
         </div>
         <div class="form-group">
-            <codemirror v-model="cmModel" :options="cmOptions"></codemirror>
+            <div class="spinner-container" v-if="loading">
+                <spinner :loading="true" :color="'#3490dc'"></spinner>
+            </div>
+            <codemirror v-else v-model="cmModel" :options="cmOptions"></codemirror>
         </div>
         <div class="form-group text-center" style="position:relative;">
-            <button type="button" @click="submitCode" class="btn btn-success"><i class="fa fa-check"></i> <span v-text="code_id ? '修改代码' : '提交代码'"></span></button>
+            <button type="button" @click="submitCode" class="btn btn-success"><i class="fa fa-check"></i> <span
+                    v-text="code_id ? '修改代码' : '提交代码'"></span></button>
             <a class="btn btn-outline-secondary" href="/">取消</a>
 
-            <a id="navbarDropdown" :class="'dropdown-toggle btn btn-xs ' + code_language.cssClass" href="#" role="button"
+            <a id="navbarDropdown" :class="'dropdown-toggle btn btn-sm ' + code_language.cssClass" href="#"
+               role="button"
                data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false" style="position: absolute;right:0px;">
                 <i :class="'fab fa-' + code_language.id"></i> {{ code_language.name }} <span class="caret"></span></a>
@@ -43,21 +48,49 @@
 
     const Swal = require('sweetalert2')
 
+    import GridLoader from 'vue-spinner/src/GridLoader'
+
     export default {
         name: 'code_editor',
         components: {
-            codemirror
+            codemirror,
+            'spinner': GridLoader
         },
         props: ['name', 'code_id'],
         data() {
             return {
+                loading: false,
                 subject: '',
                 code_language: {},
                 code_language_list: [
-                    {'id': 'php', 'name': 'PHP', 'mime': 'application/x-httpd-php', 'theme': 'cobalt','cssClass' : 'btn-outline-primary'},
-                    {'id': 'js', 'name': 'JavaScript', 'mime': 'text/javascript', 'theme': 'solarized light','cssClass' : 'btn-outline-success'},
-                    {'id': 'python', 'name': 'Python', 'mime': 'text/x-python', 'theme': 'material','cssClass' : 'btn-outline-danger'},
-                    {'id': 'css', 'name': 'CSS', 'mime': 'text/css', 'theme': 'material','cssClass' : 'btn-outline-info'}
+                    {
+                        'id': 'php',
+                        'name': 'PHP',
+                        'mime': 'application/x-httpd-php',
+                        'theme': 'cobalt',
+                        'cssClass': 'btn-outline-primary'
+                    },
+                    {
+                        'id': 'js',
+                        'name': 'JavaScript',
+                        'mime': 'text/javascript',
+                        'theme': 'solarized light',
+                        'cssClass': 'btn-outline-success'
+                    },
+                    {
+                        'id': 'python',
+                        'name': 'Python',
+                        'mime': 'text/x-python',
+                        'theme': 'material',
+                        'cssClass': 'btn-outline-danger'
+                    },
+                    {
+                        'id': 'css',
+                        'name': 'CSS',
+                        'mime': 'text/css',
+                        'theme': 'material',
+                        'cssClass': 'btn-outline-info'
+                    }
                 ],
                 cmModel: null,
                 cmOptions: {
@@ -86,11 +119,15 @@
                     this.subject = res.data.subject;
                     this.cmModel = res.data.code;
                     this.changeCodeLanguage(res.data.language);
+
+                    this.$nextTick(() => {
+                        this.loading = false
+                    })
                 })
             },
             submitCode() {
                 let data = {
-                    'id' : this.code_id,
+                    'id': this.code_id,
                     'subject': this.subject,
                     'code': this.cmModel,
                     'language': this.code_language.id,
@@ -118,7 +155,7 @@
             },
         },
         mounted() {
-            if(!this.code_id) {
+            if (!this.code_id) {
                 this.$refs['subject'].focus();
             }
         },
