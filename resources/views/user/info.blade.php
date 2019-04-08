@@ -47,7 +47,11 @@
                         class="fa fa-code"></i> {{ __('userinfo.UserCodeList',['name' => $user->name]) }}</strong>
         </div>
         <div class="card-body my-code-list">
-            <code_list :user_id="'{{ $user->id }}'"/>
+            @foreach($code_list as $code)
+                @component('code.code',['code' => $code])
+                @endcomponent
+            @endforeach
+            {{ $code_list->links() }}
         </div>
     </div>
 @endsection

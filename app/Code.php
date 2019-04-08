@@ -33,14 +33,14 @@ class Code extends Model
         return app('auth')->id() === $this->user_id;
     }
 
-    public static function getCodeList($language = '', $user_id = '')
+    public static function getCodeList($args)
     {
         $codes = app('code')::with(['user']);
-        if ($language) {
-            $codes->where('language', $language);
+        if (isset($args['language'])) {
+            $codes->where('language', $args['language']);
         }
-        if ($user_id) {
-            $codes->where('user_id', $user_id);
+        if (isset($args['user_id'])) {
+            $codes->where('user_id', $args['user_id']);
         }
         $codes->orderBy('created_at', 'DESC');
         return $codes->paginate(config()->get('app.per_page'));

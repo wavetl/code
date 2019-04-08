@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\NonExistsException;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -18,7 +19,7 @@ class CodeController extends BaseController
     public function index(Request $request)
     {
         $language = $request->route('language');
-        $code_list = app('code')::getCodeList($language);
+        $code_list = app('code')::getCodeList(['language' => $language]);
 
         return view('home', compact('code_list', 'language'));
     }
@@ -70,6 +71,10 @@ class CodeController extends BaseController
     public function view(Request $request)
     {
         $code = app('code')::find($request->route('id'));
+
+        if(!$code) {
+            return redirect(route('home'))->with('error','代码块不存在');
+        }
 
         app(CodeAddHitJob::class)::dispatch($code);
         return view('code/view', compact('code'));

@@ -18,7 +18,14 @@ class UserController extends BaseController
     public function info(Request $request)
     {
         $user = app('user')->find($request->route('id'));
-        return view('user/info', compact('user'));
+
+        if (!$user) {
+            return redirect(route('home'))->with('error', '用户不存在');
+        }
+
+        $code_list = app('code')->getCodeList(['user_id' => $user->id]);
+
+        return view('user/info', compact('user', 'code_list'));
     }
 
     public function edit_info(Request $request)
