@@ -1,5 +1,6 @@
 <?php
 return [
+    'username' => '用户名',
     'name' => '昵称',
     'email' => 'E-mail',
     'password' => '密码',

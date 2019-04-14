@@ -17,7 +17,7 @@ class UserController extends BaseController
 
     public function info(Request $request)
     {
-        $user = app('user')->find($request->route('id'));
+        $user = app('user')->where(['username' => $request->route('username')])->first();
 
         if (!$user) {
             return redirect(route('home'))->with('error', '用户不存在');
@@ -43,6 +43,7 @@ class UserController extends BaseController
             return redirect()->back()->with('error', '该昵称已被使用');
         }
 
+        $user->name = $validated['name'];
         $user->password = Hash::make($validated['password']);
         $user->save();
 

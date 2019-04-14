@@ -9,6 +9,16 @@
                 @csrf
 
                 <div class="form-group row">
+                    <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('login.username') }}</label>
+
+                    <div class="col-md-6">
+                        <input id="username" type="text" disabled="disabled"
+                               class="form-control{{ $errors->has('username') ? ' is-invalid' : '' }}" name="username"
+                               value="{{ $user->username }}">
+                    </div>
+                </div>
+
+                <div class="form-group row">
                     <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('login.email') }}</label>
 
                     <div class="col-md-6">

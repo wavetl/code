@@ -81,7 +81,7 @@ const app = new Vue({
                             '您的消息成功发送给对方',
                             'success'
                         ).then(() => {
-                            window.location.href = '/';
+                            window.location.href = '/pm';
                         })
                     }).catch(error => {
                         for (let obj of Object.keys(error.response.data.errors)) {

@@ -29,7 +29,7 @@ Route::get('/edit/{id}', 'CodeController@edit')->name('code_edit');
 
 // USER routes
 Route::get('/user/center', 'UserController@center')->name('user_center')->middleware('auth');
-Route::get('/user/info/{id}', 'UserController@info')->name('user_info');
+Route::get('/user/info/{username}', 'UserController@info')->name('user_info');
 Route::get('/auth/edit_info', 'UserController@edit_info')->name('user_edit_info');
 Route::post('/auth/update_info', 'UserController@update_info')->name('user_update_info')->middleware('auth');
 

@@ -6,8 +6,8 @@ use App\Code;
 use App\PM;
 use App\User;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\View\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,9 +18,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        app()->bind('code', Code::class);
-        app()->bind('pm', PM::class);
-        app()->bind('user', User::class);
+        $this->app->bind('code', Code::class);
+        $this->app->bind('pm', PM::class);
+        $this->app->bind('user', User::class);
     }
 
     /**
@@ -36,11 +36,17 @@ class AppServiceProvider extends ServiceProvider
             $users = app('user')->where('code_count', '>', 0)->orderBy('code_count', 'DESC')->get();
             $html = '<ul class="pl-0 list-unstyled">';
             foreach ($users as $user) {
-                $html .= '<li><i class="fa fa-user mr-2"></i> <a class="text-success" href="' . route('user_info', ['id' => $user->id]) . '">' . $user->name . '</a> (' . $user->code_count . ')</li>';
+                $html .= '<li><i class="fa fa-user mr-2"></i> <a class="text-success" href="' . route('user_info', ['username' => $user->username]) . '">' . $user->name . '</a> (' . $user->code_count . ')</li>';
             }
             $html .= '</u>';
             return $html;
         });
+
+//        DB::listen(function ($query)
+//        {
+//            echo($query->sql);
+//            var_dump($query->bindings);
+//        });
 
         app('cache')->get('total_users', function () {
             $count = app('user')->count();
