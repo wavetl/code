@@ -1,6 +1,10 @@
 # code
 基于 Laravel 5.8 框架开发的 代码分享平台
 
+# 演示地址
+
+http://code.mysoop.net
+
 
 # 安装
 
