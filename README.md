@@ -3,7 +3,7 @@
 
 # 演示地址
 
-http://code.mysoop.net
+<a target="_blank" href="http://code.mysoop.net">Demo page</a>
 
 
 # 安装
