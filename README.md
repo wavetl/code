@@ -1,9 +1,9 @@
 # code
-基于 Laravel 5.8 框架开发的 代码分享平台
+基于 Laravel 5.8 框架开发的 代码分享平台，支持代码高亮显示，代码分享排行榜等功能。
 
 # 演示地址
 
-[Demo page](http://code.mysoop.net){:target="_blank"}
+http://code.mysoop.net
 
 
 # 安装
